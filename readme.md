@@ -47,4 +47,4 @@ The Django backend must allow your GitHub Pages origin. In `settings.py`:
 CORS_ALLOWED_ORIGIN_REGEXES = [r"^https://[\w-]+\.github\.io$"]
 \`\`\`
 
-(Already included in the Batch 1 settings I provided.)
+(Already included in the Batch 1 settings I provided.)# DAMCF-Stand-alone-Front-End
