@@ -12,11 +12,11 @@ const isLocalhost =
 
 export const API_BASE = isLocalhost
   ? "http://127.0.0.1:8000/damcf/api/v1"
-  : "https://digitallife11.pythonanywhere.com/damcf/api/v1";
+  : "https://www.paratara.com/damcf/api/v1";
 
 export const SITE_URL = isLocalhost
   ? "http://127.0.0.1:8000"
-  : "https://digitallife11.pythonanywhere.com";
+  : "https://www.paratara.com";
 
 // Local storage keys for JWT tokens
 export const TOKEN_KEY = "damcf_access";
