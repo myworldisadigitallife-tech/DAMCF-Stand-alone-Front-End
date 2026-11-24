@@ -44,6 +44,7 @@ export async function renderDashboard(app, user) {
         <h1 class="text-2xl font-bold">Dashboard</h1>
         <div class="text-sm text-gray-500">Signed in as ${escapeHtml(user.username)}${user.is_superuser ? " (superuser)" : ""}</div>
       </div>
+      ${user.is_agent || user.is_superuser ? `<a href="#/properties/new" class="bg-emerald-700 text-white px-4 py-2 rounded">Create listing</a>` : ""}
     </div>
 
     <div class="bg-white rounded-lg shadow overflow-hidden">
@@ -60,9 +61,7 @@ export async function renderDashboard(app, user) {
       </table>
     </div>
 
-    <div class="mt-4 text-sm text-gray-500">
-      You can edit listing details here. Image uploads are not available in this dashboard yet.
-    </div>
+    ${user.is_agent || user.is_superuser ? `<a href="#/services" class="inline-block mt-4 text-emerald-700 hover:underline">Manage services</a>` : ""}
   `;
 
   // Delete handler

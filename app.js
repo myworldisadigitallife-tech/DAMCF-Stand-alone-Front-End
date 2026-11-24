@@ -11,6 +11,7 @@ import { renderLogin } from "./pages/login.js";
 import { renderRegister } from "./pages/register.js";
 import { renderDashboard } from "./pages/dashboard.js";
 import { renderPropertyEdit } from "./pages/property-edit.js";
+import { renderPropertyCreate } from "./pages/property-create.js";
 
 // ---------------------------------------------------------------------------
 // Global state
@@ -118,10 +119,12 @@ async function router() {
       await renderListings(app);
     } else if (path === "properties" && param && rest[1] === "edit") {
       await renderPropertyEdit(app, param);
+    } else if (path === "properties" && param === "new") {
+      await renderPropertyCreate(app);
     } else if (path === "properties" && param) {
       await renderPropertyDetail(app, param);
     } else if (path === "services") {
-      await renderServices(app);
+      await renderServices(app, currentUser);
     } else if (path === "agents") {
       await renderAgents(app);
     } else if (path === "contact") {
