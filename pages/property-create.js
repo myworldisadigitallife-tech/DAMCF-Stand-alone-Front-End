@@ -41,6 +41,9 @@ export async function renderPropertyCreate(app) {
         <label class="block text-sm font-medium">Description
           <textarea name="description" rows="5" class="w-full border rounded px-3 py-2 mt-1"></textarea>
         </label>
+        <label class="block text-sm font-medium">Listing photos
+          <input name="images" type="file" accept="image/*" multiple class="block mt-1" />
+        </label>
         <div id="create-feedback" role="status" class="text-sm"></div>
         <button class="bg-emerald-700 text-white px-4 py-2 rounded" type="submit">Create listing</button>
       </form>
@@ -65,10 +68,20 @@ export async function renderPropertyCreate(app) {
         status: data.get("status"),
         description: data.get("description"),
       });
+      const photos = Array.from(data.getAll("images")).filter(
+        (file) => file instanceof File && file.size > 0
+      );
+      for (let index = 0; index < photos.length; index += 1) {
+        feedback.textContent = `Listing created. Uploading photo ${index + 1} of ${photos.length}...`;
+        const body = new FormData();
+        body.append("image", photos[index]);
+        await post(`/properties/${property.id}/images/`, body, { isForm: true });
+      }
       location.hash = `#/properties/${property.id}/edit`;
     } catch (error) {
       feedback.textContent =
-        (error.data && JSON.stringify(error.data)) || error.message || "Could not create listing.";
+        `${error.data && JSON.stringify(error.data) || error.message || "Request failed."} ` +
+        "If the listing was created, open it from your dashboard to retry photo uploads.";
       feedback.className = "text-sm text-rose-600";
     }
   });

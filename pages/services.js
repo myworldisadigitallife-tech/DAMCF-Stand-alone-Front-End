@@ -32,7 +32,12 @@ export async function renderServices(app, user = null) {
         <h2 id="service-form-title" class="text-lg font-semibold">Add a service</h2>
         <input name="name" required maxlength="120" placeholder="Service name" class="w-full border px-3 py-2" />
         <textarea name="description" rows="3" placeholder="Description" class="w-full border px-3 py-2"></textarea>
-        <input name="image" type="url" placeholder="Image URL (optional)" class="w-full border px-3 py-2" />
+        <label class="block text-sm">Upload service photo
+          <input name="image_file" type="file" accept="image/*" class="block mt-1" />
+        </label>
+        <label class="block text-sm">Or use an image URL
+          <input name="image" type="url" placeholder="https://..." class="w-full border px-3 py-2 mt-1" />
+        </label>
         <label class="flex items-center gap-2 text-sm"><input name="active" type="checkbox" checked /> Published</label>
         <div id="service-feedback" role="status" class="text-sm"></div>
         <button class="bg-emerald-700 text-white px-4 py-2" type="submit">Save service</button>
@@ -62,6 +67,7 @@ export async function renderServices(app, user = null) {
       form.elements.name.value = service.name;
       form.elements.description.value = service.description || "";
       form.elements.image.value = service.image || "";
+      form.elements.image_file.value = "";
       form.elements.active.checked = service.active;
       document.getElementById("service-form-title").textContent = `Edit ${service.name}`;
       cancel.hidden = false;
@@ -80,8 +86,15 @@ export async function renderServices(app, user = null) {
     feedback.textContent = "Saving...";
     feedback.className = "text-sm text-gray-500";
     try {
-      if (editingId) await patch(`/services/${editingId}/`, payload);
-      else await post("/services/", payload);
+      const service = editingId
+        ? await patch(`/services/${editingId}/`, payload)
+        : await post("/services/", payload);
+      const imageFile = values.get("image_file");
+      if (imageFile instanceof File && imageFile.size > 0) {
+        const body = new FormData();
+        body.append("image", imageFile);
+        await post(`/services/${service.id}/image/`, body, { isForm: true });
+      }
       await renderServices(app, user);
     } catch (error) {
       feedback.textContent =
