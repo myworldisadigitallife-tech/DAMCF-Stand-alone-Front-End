@@ -2,7 +2,13 @@ import { get, post } from "../api.js";
 import { escapeHtml, formatPrice } from "./home.js";
 
 export async function renderPropertyDetail(app, id) {
-  const p = await get(`/properties/${id}/`, { auth: false });
+  const [p, agentsData] = await Promise.all([
+    get(`/properties/${id}/`, { auth: false }),
+    get("/agents/", { auth: false }),
+  ]);
+  const agent = (agentsData.results || []).find(
+    (candidate) => String(candidate.user) === String(p.created_by)
+  );
 
   const images = (p.images || [])
     .map(
@@ -10,22 +16,22 @@ export async function renderPropertyDetail(app, id) {
         `<button type="button" class="property-image" aria-label="View image of ${escapeHtml(p.title)}"><img src="${img.image}" alt="${escapeHtml(p.title)}" class="thumb" loading="lazy" /></button>`
     )
     .join("");
-  const agentCard = p.agent
+  const agentCard = agent
     ? `
       <section class="mt-10 border-t border-gray-200 pt-7">
         <h2 class="text-xl font-bold mb-4">Listed by</h2>
         <div class="flex flex-col sm:flex-row gap-4 bg-white rounded-lg shadow p-5">
           ${
-            p.agent.photo
-              ? `<img src="${escapeHtml(p.agent.photo)}" alt="${escapeHtml(p.agent.name)}" class="w-24 h-24 rounded-full object-cover" loading="lazy" />`
-              : `<div class="w-24 h-24 rounded-full bg-emerald-50 text-emerald-800 flex items-center justify-center text-2xl font-semibold">${escapeHtml((p.agent.name || "A").slice(0, 1))}</div>`
+            agent.photo
+              ? `<img src="${escapeHtml(agent.photo)}" alt="${escapeHtml(agent.name)}" class="w-24 h-24 rounded-full object-cover" loading="lazy" />`
+              : `<div class="w-24 h-24 rounded-full bg-emerald-50 text-emerald-800 flex items-center justify-center text-2xl font-semibold">${escapeHtml((agent.name || "A").slice(0, 1))}</div>`
           }
           <div class="space-y-1">
-            <h3 class="font-semibold text-lg">${escapeHtml(p.agent.name)}</h3>
-            ${p.agent.title ? `<p class="text-sm text-gray-600">${escapeHtml(p.agent.title)}</p>` : ""}
-            ${p.agent.email ? `<a class="block text-sm text-emerald-700 hover:underline" href="mailto:${escapeHtml(p.agent.email)}">${escapeHtml(p.agent.email)}</a>` : ""}
-            ${p.agent.phone ? `<a class="block text-sm text-emerald-700 hover:underline" href="tel:${escapeHtml(p.agent.phone)}">${escapeHtml(p.agent.phone)}</a>` : ""}
-            ${p.agent.bio ? `<p class="text-sm text-gray-600 mt-2">${escapeHtml(p.agent.bio).replace(/\n/g, "<br/>")}</p>` : ""}
+            <h3 class="font-semibold text-lg">${escapeHtml(agent.name)}</h3>
+            ${agent.title ? `<p class="text-sm text-gray-600">${escapeHtml(agent.title)}</p>` : ""}
+            ${agent.email ? `<a class="block text-sm text-emerald-700 hover:underline" href="mailto:${escapeHtml(agent.email)}">${escapeHtml(agent.email)}</a>` : ""}
+            ${agent.phone ? `<a class="block text-sm text-emerald-700 hover:underline" href="tel:${escapeHtml(agent.phone)}">${escapeHtml(agent.phone)}</a>` : ""}
+            ${agent.bio ? `<p class="text-sm text-gray-600 mt-2">${escapeHtml(agent.bio).replace(/\n/g, "<br/>")}</p>` : ""}
           </div>
         </div>
       </section>
