@@ -27,7 +27,7 @@ export async function renderListings(app) {
     grid = results
       .map(
         (p) => `
-      <a href="#/properties/${p.id}" class="card-hover block bg-white rounded-lg shadow overflow-hidden">
+      <a href="#/properties/${p.id}" class="block bg-white shadow overflow-hidden">
         ${
           p.primary_image
             ? `<img src="${p.primary_image}" alt="${escapeHtml(p.title)}" class="thumb" loading="lazy" />`

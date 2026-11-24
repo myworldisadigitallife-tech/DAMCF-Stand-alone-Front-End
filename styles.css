@@ -1,5 +1,74 @@
 /* Minimal custom CSS — Tailwind handles the rest. */
 
+.nav-toggle {
+  display: none;
+}
+
+.primary-navigation {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  flex-wrap: wrap;
+  font-size: 1rem;
+}
+
+.primary-navigation a,
+.primary-navigation button {
+  min-height: 2.75rem;
+  display: inline-flex;
+  align-items: center;
+}
+
+@media (max-width: 640px) {
+  #site-header > div {
+    position: relative;
+    flex-wrap: wrap;
+    padding-top: 0.25rem;
+    padding-bottom: 0.25rem;
+  }
+
+  .nav-toggle {
+    width: 2.75rem;
+    height: 2.75rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 0.3rem;
+    border: 1px solid #d1d5db;
+    background: white;
+    cursor: pointer;
+  }
+
+  .nav-toggle span {
+    width: 1.25rem;
+    height: 2px;
+    background: #064e3b;
+  }
+
+  .primary-navigation {
+    display: none;
+    width: 100%;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0.25rem;
+    padding: 0.5rem 0 0.25rem;
+    font-size: 1.125rem;
+  }
+
+  .primary-navigation.is-open {
+    display: flex;
+  }
+
+  .primary-navigation a,
+  .primary-navigation button {
+    width: 100%;
+    min-height: 3rem;
+    padding: 0.5rem 0.75rem;
+    text-align: left;
+  }
+}
+
 .spinner {
   border: 3px solid #f3f3f3;
   border-top: 3px solid #10b981;
@@ -28,6 +97,64 @@
   width: 100%;
   display: block;
   background: #e5e7eb;
+}
+
+.property-image {
+  display: block;
+  width: 100%;
+  overflow: hidden;
+  padding: 0;
+  border: 0;
+  background: #e5e7eb;
+  cursor: zoom-in;
+}
+.property-image:focus-visible {
+  outline: 3px solid #10b981;
+  outline-offset: 2px;
+}
+
+.image-viewer:not([open]) {
+  display: none;
+}
+.image-viewer[open] {
+  position: fixed;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  width: 100vw;
+  max-width: none;
+  height: 100vh;
+  max-height: none;
+  margin: 0;
+  padding: 3rem;
+  border: 0;
+  background: #090b0d;
+  color: white;
+}
+.image-viewer::backdrop {
+  background: #090b0d;
+}
+.image-viewer__image {
+  display: block;
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+}
+.image-viewer__close {
+  position: absolute;
+  top: 1rem;
+  right: 1.25rem;
+  padding: 0.25rem 0.6rem;
+  border: 0;
+  background: transparent;
+  color: white;
+  font-size: 2rem;
+  line-height: 1;
+  cursor: pointer;
+}
+.image-viewer__close:focus-visible {
+  outline: 2px solid #10b981;
+  outline-offset: 3px;
 }
 
 /* Simple fade for page transitions */

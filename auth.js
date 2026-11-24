@@ -1,9 +1,9 @@
 import { api, setTokens, clearTokens, getAccessToken } from "./api.js";
 
-export async function login(email, password) {
+export async function login(username, password) {
   const data = await api("/auth/login/", {
     method: "POST",
-    body: { username: email, password },
+    body: { username, password },
     auth: false,
   });
   setTokens({ access: data.access, refresh: data.refresh });

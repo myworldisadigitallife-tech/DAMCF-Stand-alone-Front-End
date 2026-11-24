@@ -29,6 +29,7 @@ export async function renderDashboard(app, user) {
         <td class="py-2">${formatPrice(p.price)}</td>
         <td class="py-2 text-right">
           <a href="#/properties/${p.id}" class="text-emerald-600 text-sm hover:underline mr-3">View</a>
+          <a href="#/properties/${p.id}/edit" class="text-emerald-600 text-sm hover:underline mr-3">Edit</a>
           <button data-id="${p.id}" class="delete-btn text-rose-600 text-sm hover:underline">Delete</button>
         </td>
       </tr>
@@ -60,7 +61,7 @@ export async function renderDashboard(app, user) {
     </div>
 
     <div class="mt-4 text-sm text-gray-500">
-      Creating, editing, and file uploads can be added later — this dashboard is read + delete for now.
+      You can edit listing details here. Image uploads are not available in this dashboard yet.
     </div>
   `;
 

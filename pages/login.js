@@ -5,7 +5,7 @@ export async function renderLogin(app, onSuccess) {
     <div class="max-w-sm mx-auto">
       <h1 class="text-2xl font-bold mb-4">Login</h1>
       <form id="login-form" class="space-y-3 bg-white p-5 rounded-lg shadow">
-        <input name="email" type="email" required placeholder="Email" class="w-full border rounded px-3 py-2" />
+        <input name="username" type="text" required placeholder="Username" class="w-full border rounded px-3 py-2" />
         <input name="password" type="password" required placeholder="Password" class="w-full border rounded px-3 py-2" />
         <button type="submit" class="w-full bg-emerald-600 text-white py-2 rounded hover:bg-emerald-700">Login</button>
         <div id="login-feedback" class="text-sm"></div>
@@ -24,7 +24,7 @@ export async function renderLogin(app, onSuccess) {
     feedback.textContent = "";
     const fd = new FormData(form);
     try {
-      await login(fd.get("email"), fd.get("password"));
+      await login(fd.get("username"), fd.get("password"));
       if (onSuccess) await onSuccess();
       location.hash = "#/dashboard";
     } catch (err) {

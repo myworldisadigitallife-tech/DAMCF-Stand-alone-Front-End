@@ -10,6 +10,7 @@ import { renderContact } from "./pages/contact.js";
 import { renderLogin } from "./pages/login.js";
 import { renderRegister } from "./pages/register.js";
 import { renderDashboard } from "./pages/dashboard.js";
+import { renderPropertyEdit } from "./pages/property-edit.js";
 
 // ---------------------------------------------------------------------------
 // Global state
@@ -29,9 +30,12 @@ function renderHeader() {
   const loggedIn = !!currentUser;
 
   header.innerHTML = `
-    <div class="max-w-6xl mx-auto px-4 flex items-center justify-between h-14">
+    <div class="max-w-6xl mx-auto px-4 flex items-center justify-between min-h-14">
       <a href="#/" class="font-bold text-lg">DAMCF Realty</a>
-      <nav class="flex gap-4 items-center text-sm flex-wrap">
+      <button id="nav-toggle" class="nav-toggle" type="button" aria-expanded="false" aria-controls="primary-navigation" aria-label="Open navigation menu">
+        <span></span><span></span><span></span>
+      </button>
+      <nav id="primary-navigation" class="primary-navigation">
         <a href="#/" class="hover:text-emerald-600">Home</a>
         <a href="#/listings" class="hover:text-emerald-600">Listings</a>
         <a href="#/services" class="hover:text-emerald-600">Services</a>
@@ -51,6 +55,25 @@ function renderHeader() {
       </nav>
     </div>
   `;
+
+  const navToggle = document.getElementById("nav-toggle");
+  const navigation = document.getElementById("primary-navigation");
+  navToggle.addEventListener("click", () => {
+    const expanded = navToggle.getAttribute("aria-expanded") === "true";
+    navToggle.setAttribute("aria-expanded", String(!expanded));
+    navToggle.setAttribute(
+      "aria-label",
+      expanded ? "Open navigation menu" : "Close navigation menu"
+    );
+    navigation.classList.toggle("is-open", !expanded);
+  });
+  navigation.querySelectorAll("a").forEach((link) => {
+    link.addEventListener("click", () => {
+      navToggle.setAttribute("aria-expanded", "false");
+      navToggle.setAttribute("aria-label", "Open navigation menu");
+      navigation.classList.remove("is-open");
+    });
+  });
 
   const logoutBtn = document.getElementById("logout-btn");
   if (logoutBtn) {
@@ -93,6 +116,8 @@ async function router() {
       await renderHome(app);
     } else if (path === "listings") {
       await renderListings(app);
+    } else if (path === "properties" && param && rest[1] === "edit") {
+      await renderPropertyEdit(app, param);
     } else if (path === "properties" && param) {
       await renderPropertyDetail(app, param);
     } else if (path === "services") {
