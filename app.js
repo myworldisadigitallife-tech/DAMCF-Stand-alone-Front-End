@@ -33,26 +33,28 @@ function renderHeader() {
   const loggedIn = !!currentUser;
 
   header.innerHTML = `
-    <div class="max-w-6xl mx-auto px-4 flex items-center justify-between min-h-14">
-      <a href="#/" class="font-bold text-lg">DAMCF Realty</a>
+    <div class="site-header__inner max-w-6xl mx-auto px-4 flex items-center justify-between">
+      <a href="#/" class="site-brand" aria-label="DAMCF Realty home">
+        <img src="assets/damcf-logo.png" alt="DAMCF Realty and Brokerage" />
+      </a>
       <button id="nav-toggle" class="nav-toggle" type="button" aria-expanded="false" aria-controls="primary-navigation" aria-label="Open navigation menu">
         <span></span><span></span><span></span>
       </button>
       <nav id="primary-navigation" class="primary-navigation">
-        <a href="#/" class="hover:text-emerald-600">Home</a>
-        <a href="#/listings" class="hover:text-emerald-600">Listings</a>
-        <a href="#/services" class="hover:text-emerald-600">Services</a>
-        <a href="#/agents" class="hover:text-emerald-600">Agents</a>
-        <a href="#/contact" class="hover:text-emerald-600">Contact</a>
+        <a href="#/">Home</a>
+        <a href="#/listings">Listings</a>
+        <a href="#/services">Services</a>
+        <a href="#/agents">Agents</a>
+        <a href="#/contact">Contact</a>
         ${
           loggedIn
             ? `
-              <a href="#/dashboard" class="hover:text-emerald-600">Dashboard</a>
-              <button id="logout-btn" class="text-rose-600 hover:underline">Logout</button>
+              <a href="#/dashboard">Dashboard</a>
+              <button id="logout-btn" class="site-nav__logout">Logout</button>
             `
             : `
-              <a href="#/login" class="hover:text-emerald-600">Login</a>
-              <a href="#/register" class="bg-emerald-600 text-white px-3 py-1 rounded hover:bg-emerald-700">Sign up</a>
+              <a href="#/login">Login</a>
+              <a href="#/register" class="site-nav__cta">Join our team</a>
             `
         }
       </nav>
@@ -92,11 +94,11 @@ function renderHeader() {
 function renderFooter() {
   const footer = document.getElementById("site-footer");
   footer.innerHTML = `
-    <div class="max-w-6xl mx-auto px-4 text-sm space-y-1">
-      <div class="font-semibold">DAMCF Realty Incorporated</div>
+    <div class="site-footer__inner max-w-6xl mx-auto px-4 text-sm">
+      <div class="site-footer__name">DAMCF Realty Incorporated</div>
       <div>Purok 3, General Luna, Siargao, Surigao del Norte</div>
       <div>+639300157769 · damcfrealtyinc@gmail.com</div>
-      <div class="opacity-70 pt-2 text-xs">
+      <div class="site-footer__copyright">
         © ${new Date().getFullYear()} DAMCF Realty Incorporated.
       </div>
     </div>
