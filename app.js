@@ -66,6 +66,7 @@ function renderHeader() {
   navToggle.addEventListener("click", () => {
     const expanded = navToggle.getAttribute("aria-expanded") === "true";
     navToggle.setAttribute("aria-expanded", String(!expanded));
+    navToggle.classList.toggle("is-open", !expanded);
     navToggle.setAttribute(
       "aria-label",
       expanded ? "Open navigation menu" : "Close navigation menu"
@@ -75,6 +76,7 @@ function renderHeader() {
   navigation.querySelectorAll("a").forEach((link) => {
     link.addEventListener("click", () => {
       navToggle.setAttribute("aria-expanded", "false");
+      navToggle.classList.remove("is-open");
       navToggle.setAttribute("aria-label", "Open navigation menu");
       navigation.classList.remove("is-open");
     });

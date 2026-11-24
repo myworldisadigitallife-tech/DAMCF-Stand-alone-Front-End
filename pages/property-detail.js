@@ -65,10 +65,6 @@ export async function renderPropertyDetail(app, id) {
             <input name="email" type="email" required placeholder="Your email" class="w-full border rounded px-3 py-2" />
             <input name="requested_date" type="date" required class="w-full border rounded px-3 py-2" />
             <textarea name="message" rows="3" placeholder="Message (optional)" class="w-full border rounded px-3 py-2"></textarea>
-            <label class="flex items-center gap-2 text-sm">
-              <input type="checkbox" name="send_whatsapp" value="1" />
-              Also send via WhatsApp
-            </label>
             <button type="submit" class="w-full bg-emerald-600 text-white py-2 rounded hover:bg-emerald-700">Send Booking Request</button>
             <div id="booking-feedback" class="text-sm"></div>
           </form>
@@ -118,20 +114,19 @@ export async function renderPropertyDetail(app, id) {
       email: fd.get("email"),
       requested_date: fd.get("requested_date"),
       message: fd.get("message") || "",
-      send_whatsapp: fd.get("send_whatsapp") === "1",
     };
 
     try {
-      const res = await post("/bookings/", payload, { auth: false });
-      let html = `<div class="text-emerald-600 font-semibold">Booking request sent!</div>`;
-      if (res.wa_url) {
-        html += `<a href="${res.wa_url}" target="_blank" rel="noopener" class="text-blue-600 underline block mt-1">Open WhatsApp →</a>`;
-      }
-      feedback.innerHTML = html;
+      await post("/bookings/", payload, { auth: false });
+      feedback.className = "text-sm text-emerald-600 font-semibold";
+      feedback.textContent = "Your request was sent. We emailed you a confirmation and notified the DAMCF team.";
       form.reset();
     } catch (err) {
       feedback.className = "text-sm text-rose-600";
-      feedback.textContent = (err.data && JSON.stringify(err.data)) || "Something went wrong.";
+      feedback.textContent =
+        err.data?.detail ||
+        (err.data && JSON.stringify(err.data)) ||
+        "Something went wrong.";
     }
   });
 }

@@ -571,26 +571,89 @@ body {
   }
 
   .nav-toggle {
+    position: relative;
     border-color: var(--damcf-rule);
     background: white;
   }
 
   .nav-toggle span {
+    position: absolute;
+    left: 50%;
+    width: 1.35rem;
     background: var(--damcf-ink);
+    transform: translateX(-50%);
+    transition: transform 220ms ease, opacity 150ms ease, width 220ms ease;
+  }
+
+  .nav-toggle span:nth-child(1) {
+    transform: translate(-50%, -0.4rem);
+  }
+
+  .nav-toggle span:nth-child(2) {
+    width: 1rem;
+  }
+
+  .nav-toggle span:nth-child(3) {
+    transform: translate(-50%, 0.4rem);
+  }
+
+  .nav-toggle.is-open span:nth-child(1) {
+    transform: translate(-50%, 0) rotate(45deg);
+  }
+
+  .nav-toggle.is-open span:nth-child(2) {
+    width: 1.35rem;
+    opacity: 0;
+  }
+
+  .nav-toggle.is-open span:nth-child(3) {
+    transform: translate(-50%, 0) rotate(-45deg);
   }
 
   .primary-navigation {
-    z-index: 1;
-    gap: 0.1rem;
-    padding: 0.35rem 0 0.2rem;
+    display: flex;
+    visibility: hidden;
+    max-height: 0;
+    overflow: hidden;
+    width: 100%;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0.15rem;
+    padding: 0 0.25rem;
     background: white;
     border-top: 1px solid var(--damcf-rule);
+    opacity: 0;
+    pointer-events: none;
+    transform: translateY(-0.4rem);
+    transition:
+      max-height 320ms ease,
+      padding 220ms ease,
+      opacity 180ms ease,
+      transform 220ms ease,
+      visibility 0s linear 320ms;
+  }
+
+  .primary-navigation.is-open {
+    visibility: visible;
+    max-height: 30rem;
+    padding: 0.5rem 0.25rem 0.35rem;
+    opacity: 1;
+    pointer-events: auto;
+    transform: translateY(0);
+    transition-delay: 0s;
   }
 
   .primary-navigation a,
   .primary-navigation button {
-    min-height: 2.5rem;
-    padding: 0.3rem 0.25rem;
+    width: 100%;
+    min-height: 3rem;
+    padding: 0.45rem 0.25rem;
+    font-size: 1.15rem;
+    text-align: left;
+  }
+
+  .primary-navigation a:not(:last-child) {
+    border-bottom: 1px solid #eeece5;
   }
 
   .home-hero {
@@ -655,7 +718,9 @@ body {
 @media (prefers-reduced-motion: reduce) {
   .home-button,
   .primary-navigation a,
-  .primary-navigation button {
+  .primary-navigation button,
+  .nav-toggle span,
+  .primary-navigation {
     transition: none;
   }
 }
