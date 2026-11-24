@@ -7,11 +7,12 @@ export async function renderLogin(app, onSuccess) {
       <form id="login-form" class="space-y-3 bg-white p-5 rounded-lg shadow">
         <input name="username" type="text" required placeholder="Username" class="w-full border rounded px-3 py-2" />
         <input name="password" type="password" required placeholder="Password" class="w-full border rounded px-3 py-2" />
+        <div class="text-right text-sm"><a href="#/forgot-password" class="text-emerald-700 hover:underline">Forgot password?</a></div>
         <button type="submit" class="w-full bg-emerald-600 text-white py-2 rounded hover:bg-emerald-700">Login</button>
         <div id="login-feedback" class="text-sm"></div>
       </form>
       <div class="mt-3 text-sm text-center text-gray-500">
-        No account? <a href="#/register" class="text-emerald-600 hover:underline">Sign up as agent</a>
+        Need an account? <a href="#/register" class="text-emerald-600 hover:underline">Create an agent account</a>
       </div>
     </div>
   `;

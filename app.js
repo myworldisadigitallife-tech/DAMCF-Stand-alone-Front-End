@@ -12,6 +12,8 @@ import { renderRegister } from "./pages/register.js";
 import { renderDashboard } from "./pages/dashboard.js";
 import { renderPropertyEdit } from "./pages/property-edit.js";
 import { renderPropertyCreate } from "./pages/property-create.js";
+import { renderForgotPassword } from "./pages/forgot-password.js";
+import { renderResetPassword } from "./pages/reset-password.js";
 
 // ---------------------------------------------------------------------------
 // Global state
@@ -131,6 +133,10 @@ async function router() {
       await renderContact(app);
     } else if (path === "login") {
       await renderLogin(app, refreshUser);
+    } else if (path === "forgot-password") {
+      await renderForgotPassword(app);
+    } else if (path === "reset-password") {
+      await renderResetPassword(app, rest[0], rest[1]);
     } else if (path === "register") {
       await renderRegister(app, refreshUser);
     } else if (path === "dashboard") {
