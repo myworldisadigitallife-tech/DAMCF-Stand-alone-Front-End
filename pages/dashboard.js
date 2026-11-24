@@ -10,12 +10,11 @@ export async function renderDashboard(app, user) {
   // Fetch properties this user created
   const data = await get("/properties/");
   const all = data.results || [];
-  const agentsData = user.is_agent
-    ? await get("/agents/")
-    : { results: [] };
+  const agentsData = await get("/agents/");
   const agentProfile = (agentsData.results || []).find(
     (agent) => String(agent.user) === String(user.id)
   );
+  const isAgent = Boolean(user.is_agent || agentProfile);
 
   // Filter to this user's (if agent). If superuser, show all.
   const mine = user.is_superuser
@@ -50,7 +49,7 @@ export async function renderDashboard(app, user) {
         <h1 class="text-2xl font-bold">Dashboard</h1>
         <div class="text-sm text-gray-500">Signed in as ${escapeHtml(user.username)}${user.is_superuser ? " (superuser)" : ""}</div>
       </div>
-      ${user.is_agent || user.is_superuser ? `<a href="#/properties/new" class="bg-emerald-700 text-white px-4 py-2 rounded">Create listing</a>` : ""}
+      ${isAgent || user.is_superuser ? `<a href="#/properties/new" class="bg-emerald-700 text-white px-4 py-2 rounded">Create listing</a>` : ""}
     </div>
 
     <div class="bg-white rounded-lg shadow overflow-hidden">
@@ -67,8 +66,8 @@ export async function renderDashboard(app, user) {
       </table>
     </div>
 
-    ${user.is_agent || user.is_superuser ? `<a href="#/services" class="inline-block mt-4 text-emerald-700 hover:underline">Manage services</a>` : ""}
-    ${user.is_agent && agentProfile ? `
+    ${isAgent || user.is_superuser ? `<a href="#/services" class="inline-block mt-4 text-emerald-700 hover:underline">Manage services</a>` : ""}
+    ${agentProfile ? `
       <section class="mt-8 max-w-2xl bg-white rounded-lg shadow p-5">
         <h2 class="text-xl font-bold mb-4">My agent profile</h2>
         <form id="agent-profile-form" class="space-y-3">
