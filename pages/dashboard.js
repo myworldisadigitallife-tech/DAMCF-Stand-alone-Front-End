@@ -33,6 +33,10 @@ export async function renderDashboard(app, user) {
         <td class="py-2">${escapeHtml(p.municipality_name || "—")}</td>
         <td class="py-2">${formatPrice(p.price)}</td>
         <td class="py-2 text-right">
+          <label class="inline-flex items-center gap-1 mr-3 text-xs text-gray-600">
+            <input type="checkbox" class="featured-toggle" data-id="${p.id}" ${p.is_featured ? "checked" : ""} aria-label="Feature ${escapeHtml(p.title)}" />
+            Featured
+          </label>
           <a href="#/properties/${p.id}" class="text-emerald-600 text-sm hover:underline mr-3">View</a>
           <a href="#/properties/${p.id}/edit" class="text-emerald-600 text-sm hover:underline mr-3">Edit</a>
           <button data-id="${p.id}" class="delete-btn text-rose-600 text-sm hover:underline">Delete</button>
@@ -129,6 +133,23 @@ export async function renderDashboard(app, user) {
       }
     });
   }
+
+  app.querySelectorAll(".featured-toggle").forEach((toggle) => {
+    toggle.addEventListener("change", async () => {
+      const previousValue = !toggle.checked;
+      toggle.disabled = true;
+      try {
+        await patch(`/properties/${toggle.dataset.id}/`, {
+          is_featured: toggle.checked,
+        });
+      } catch (error) {
+        toggle.checked = previousValue;
+        alert((error.data && JSON.stringify(error.data)) || error.message || "Could not update featured status.");
+      } finally {
+        toggle.disabled = false;
+      }
+    });
+  });
 
   // Delete handler
   app.querySelectorAll(".delete-btn").forEach((btn) => {
