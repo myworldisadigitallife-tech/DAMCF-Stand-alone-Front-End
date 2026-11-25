@@ -7,6 +7,8 @@ const serviceCategories = [
     title: "Real Estate Brokerage",
     description:
       "We provide professional real estate brokerage services, assisting clients in identifying, evaluating, and acquiring properties that meet their personal, commercial, or investment objectives.",
+    image: "assets/services/real-estate-brokerage.jpg",
+    imageAlt: "Modern residential villa with a swimming pool",
     items: [
       ["Residential Lots", "Assistance in buying and selling residential lots suitable for home construction, property development, and long-term investment."],
       ["Beachfront Properties", "Brokerage services for beachfront properties, offering opportunities for private residences, vacation homes, resorts, and tourism-related investments."],
@@ -19,6 +21,8 @@ const serviceCategories = [
     title: "Documentation & Assistance",
     description:
       "We provide documentation support and coordination to help clients navigate property transactions, legal documentation, and ownership-related requirements efficiently.",
+    image: "assets/services/documentation.jpg",
+    imageAlt: "A person signing paperwork",
     items: [
       ["Title Transfer", "Assistance and coordination in processing property title transfers to facilitate the proper registration of ownership under the new owner's name."],
       ["Due Diligence", "Preliminary verification and review of property documents, ownership records, and relevant information to help identify potential issues before a transaction."],
@@ -32,6 +36,8 @@ const serviceCategories = [
     title: "Property Appraisal",
     description:
       "We offer property valuation and market assessment services to help property owners, buyers, and investors understand the estimated value and market position of their real estate assets.",
+    image: "assets/services/property-appraisal.jpg",
+    imageAlt: "A model house and keys on a desk",
     items: [
       ["Market Appraisal", "Assessment of a property's estimated market value based on its location, characteristics, condition, and prevailing market conditions."],
       ["Comparative Market Analysis", "Evaluation of similar properties in the surrounding area to establish competitive pricing and determine appropriate market positioning."],
@@ -43,6 +49,8 @@ const serviceCategories = [
     title: "Permits & Compliance",
     description:
       "We assist property owners, developers, and business operators in coordinating permits, clearances, and regulatory compliance requirements for property development and business operations.",
+    image: "assets/services/permits-compliance.jpg",
+    imageAlt: "Modern commercial buildings viewed from below",
     items: [
       ["Building Permit Assistance", "Assistance in coordinating documentation and application requirements for building permits before construction or renovation."],
       ["Zoning & Locational Clearance", "Assistance in securing zoning and locational clearances to verify that a proposed property use or development is consistent with applicable land-use regulations."],
@@ -55,6 +63,8 @@ const serviceCategories = [
     title: "Corporate & Legal Support",
     description:
       "We provide administrative and business documentation assistance to help companies establish, maintain, and manage their corporate and regulatory obligations.",
+    image: "assets/services/corporate-support.jpg",
+    imageAlt: "A contemporary corporate office interior",
     items: [
       ["SEC Registration", "Assistance in coordinating company registration and documentation requirements with the Securities and Exchange Commission (SEC)."],
       ["Business Permits & Renewals", "Assistance in processing new business permits and coordinating annual renewals to support continuous business operations."],
@@ -67,6 +77,8 @@ const serviceCategories = [
     title: "Property Management",
     description:
       "We provide property management support designed to help property owners maintain their investments, oversee tenant-related activities, and coordinate essential property operations.",
+    image: "assets/services/property-management.jpg",
+    imageAlt: "A modern, well-maintained home interior",
     items: [
       ["Tenant Screening", "Assistance in evaluating prospective tenants through background checks and relevant information to support informed leasing decisions."],
       ["Leasing Assistance", "Support in coordinating property leasing activities, tenant inquiries, lease documentation, and rental arrangements."],
@@ -94,6 +106,12 @@ export async function renderServices(app, user = null) {
               <p>${escapeHtml(category.description)}</p>
             </div>
           </div>
+          <img
+            class="service-category__image"
+            src="${escapeHtml(category.image)}"
+            alt="${escapeHtml(category.imageAlt)}"
+            loading="lazy"
+          />
           <ul class="service-category__items">
             ${category.items.map(([title, description]) => `
               <li>
