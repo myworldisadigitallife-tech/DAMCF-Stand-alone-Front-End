@@ -1,10 +1,16 @@
 import { get, post } from "../api.js";
 import { escapeHtml, formatPrice } from "./home.js";
+import {
+  humanVerificationMarkup,
+  refreshHumanVerification,
+  setHumanVerification,
+} from "./human-verification.js";
 
 export async function renderPropertyDetail(app, id) {
-  const [p, agentsData] = await Promise.all([
+  const [p, agentsData, challenge] = await Promise.all([
     get(`/properties/${id}/`, { auth: false }),
     get("/agents/", { auth: false }),
+    get("/human-verification/", { auth: false }),
   ]);
   const agent = (agentsData.results || []).find(
     (candidate) => String(candidate.user) === String(p.created_by)
@@ -65,7 +71,8 @@ export async function renderPropertyDetail(app, id) {
             <input name="email" type="email" required placeholder="Your email" class="w-full border rounded px-3 py-2" />
             <input name="requested_date" type="date" required class="w-full border rounded px-3 py-2" />
             <textarea name="message" rows="3" placeholder="Message (optional)" class="w-full border rounded px-3 py-2"></textarea>
-            <button type="submit" class="w-full bg-emerald-600 text-white py-2 rounded hover:bg-emerald-700">Send Booking Request</button>
+            ${humanVerificationMarkup("booking-human")}
+            <button type="submit" disabled class="human-verification__submit w-full bg-emerald-600 text-white py-2 rounded hover:bg-emerald-700">Send Booking Request</button>
             <div id="booking-feedback" class="text-sm"></div>
           </form>
         </div>
@@ -101,9 +108,13 @@ export async function renderPropertyDetail(app, id) {
 
   const form = document.getElementById("booking-form");
   const feedback = document.getElementById("booking-feedback");
+  const submitButton = form.querySelector('[type="submit"]');
+  setHumanVerification(form, challenge);
+  submitButton.disabled = false;
 
   form.addEventListener("submit", async (e) => {
     e.preventDefault();
+    submitButton.disabled = true;
     feedback.textContent = "Sending...";
     feedback.className = "text-sm text-gray-500";
 
@@ -114,6 +125,8 @@ export async function renderPropertyDetail(app, id) {
       email: fd.get("email"),
       requested_date: fd.get("requested_date"),
       message: fd.get("message") || "",
+      human_token: fd.get("human_token"),
+      human_answer: fd.get("human_answer"),
     };
 
     try {
@@ -121,12 +134,22 @@ export async function renderPropertyDetail(app, id) {
       feedback.className = "text-sm text-emerald-600 font-semibold";
       feedback.textContent = "Your request was sent. We emailed you a confirmation and notified the DAMCF team.";
       form.reset();
+      try {
+        await refreshHumanVerification(form);
+        submitButton.disabled = false;
+      } catch (challengeError) {
+        console.error(challengeError);
+        feedback.textContent += " Reload the page before sending another request.";
+      }
     } catch (err) {
       feedback.className = "text-sm text-rose-600";
+      const humanError = err.data?.human_answer;
       feedback.textContent =
+        (Array.isArray(humanError) ? humanError[0] : humanError) ||
         err.data?.detail ||
         (err.data && JSON.stringify(err.data)) ||
         "Something went wrong.";
+      submitButton.disabled = false;
     }
   });
 }

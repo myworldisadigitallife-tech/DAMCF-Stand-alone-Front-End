@@ -96,13 +96,20 @@ function renderHeader() {
 function renderFooter() {
   const footer = document.getElementById("site-footer");
   footer.innerHTML = `
-    <div class="site-footer__inner max-w-6xl mx-auto px-4 text-sm">
-      <div class="site-footer__name">DAMCF Realty Incorporated</div>
-      <div>Purok 3, General Luna, Siargao, Surigao del Norte</div>
-      <div>+639300157769 · damcfrealtyinc@gmail.com</div>
-      <div class="site-footer__copyright">
+    <img
+      class="site-footer__banner"
+      src="assets/damcf-footer-banner.jpg"
+      alt="Trusted solutions for your business. BIR, DENR, SEC, DTI, DOLE, and Mayor's Permit. Call +63 930 015 7769 or email damcfrealtyinc@gmail.com."
+    />
+    <div class="site-footer__details">
+      <span>DAMCF Realty Incorporated · Purok 3, General Luna, Siargao, Surigao del Norte</span>
+      <span class="site-footer__contact">
+        <a href="tel:+639300157769">+63 930 015 7769</a>
+        <a href="mailto:damcfrealtyinc@gmail.com">damcfrealtyinc@gmail.com</a>
+      </span>
+      <span class="site-footer__copyright">
         © ${new Date().getFullYear()} DAMCF Realty Incorporated.
-      </div>
+      </span>
     </div>
   `;
 }
