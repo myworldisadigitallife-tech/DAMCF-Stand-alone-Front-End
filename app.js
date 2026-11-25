@@ -120,7 +120,8 @@ function renderFooter() {
 async function router() {
   const app = document.getElementById("app");
   const hash = location.hash.replace(/^#/, "") || "/";
-  const [path, ...rest] = hash.split("/").filter(Boolean);
+  const route = hash.split("?", 1)[0];
+  const [path, ...rest] = route.split("/").filter(Boolean);
   const param = rest[0];
 
   app.innerHTML = `<div class="spinner"></div>`;
